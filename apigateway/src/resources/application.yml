@@ -14,7 +14,7 @@ eureka:
 
 zuul:
   routes:
-    uaa:
+    auth:
       path: /auth/**
       sensitiveHeaders:
       serviceId: authserver
