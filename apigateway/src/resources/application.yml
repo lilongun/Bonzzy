@@ -1,0 +1,36 @@
+server:
+  port: 9099
+
+spring:
+  application:
+    name: apigateway
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:9091/eureka/
+
+zuul:
+  routes:
+    uaa:
+      path: /auth/**
+      sensitiveHeaders:
+      serviceId: authserver
+    order:
+      path: /order/**
+      sensitiveHeaders:
+      serviceId: orderserver
+  add-proxy-headers: true
+
+security:
+  oauth2:
+    client:
+      access-token-uri: http://localhost:9090/auth/oauth/token
+      user-authorization-uri: http://localhost:9090/auth/oauth/authorize
+      client-id: webapp
+    resource:
+      user-info-uri: http://localhost:9090/auth/user
+      prefer-token-info: false
+
