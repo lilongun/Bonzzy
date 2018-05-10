@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bonzzy.authserver.dao.SysUserDao">
+     <resultMap type="com.bonzzy.authserver.domain.SysUser" id="sysUser">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="first_name" column="firstName"/>
+        <result property="last_name" column="lastName"/>
+        <result property="email" column="email"/>
+        <result property="image_url" column="imageUrl"/>
+        <collection property="roles" column="id" select="findSysRole" ofType="com.bonzzy.authserver.domain.SysRole">
+        </collection>
+     </resultMap>
+
+     <resultMap type="com.bonzzy.authserver.domain.SysRole" id="sysRole">
+         <id property="id" column="id"/>
+         <result property="name" column="name"/>
+         <result property="value" column="value"/>
+         <collection property="authorities" column="id" select="findSysAuthority" ofType="com.bonzzy.authserver.domain.SysAuthority">
+         </collection>
+     </resultMap>
+
+     <resultMap type="com.bonzzy.authserver.domain.SysAuthority" id="sysAuthority">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="value" column="value"/>
+     </resultMap>
+
+     <select id="findOneWithRolesByUsername" resultMap="sysUser">
+        select * from sys_user where username=#{username}
+     </select>
+
+     <select id="findSysRole" resultMap="sysRole">
+        select sr.* from sys_role sr, sys_user_roles sur where sur.sys_user_id=#{id} and sr.id=sur.roles_id
+     </select>
+
+     <select id="findSysAuthority" resultMap="sysAuthority">
+         select * from sys_authority sa,sys_role_authorities sra where sra.sys_role_id=#{id} and sa.id=sra.authorities_id
+     </select>
+</mapper>

@@ -11,6 +11,8 @@
   <modules>
     <module>eurekaserver</module>
     <module>apigateway</module>
+    <module>authserver</module>
+      <module>orderserver</module>
   </modules>
 
   <name>bonzzy</name>

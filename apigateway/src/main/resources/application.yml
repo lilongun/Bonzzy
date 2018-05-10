@@ -27,10 +27,10 @@ zuul:
 security:
   oauth2:
     client:
-      access-token-uri: http://localhost:9090/auth/oauth/token
-      user-authorization-uri: http://localhost:9090/auth/oauth/authorize
+      access-token-uri: http://localhost:9099/auth/oauth/token
+      user-authorization-uri: http://localhost:9099/auth/oauth/authorize
       client-id: webapp
     resource:
-      user-info-uri: http://localhost:9090/auth/user
+      user-info-uri: http://localhost:9099/auth/user
       prefer-token-info: false
 
