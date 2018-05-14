@@ -19,4 +19,6 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserImageUploadUrl ='ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images';
 	// 上传Flash按钮(标签) 
 	config.filebrowserFlashUploadUrl ='ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash';
+
+    config.extraPlugins='jwplayer';
 };
