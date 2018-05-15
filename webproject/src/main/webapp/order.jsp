@@ -1,5 +1,12 @@
 <!DOCTYPE unspecified PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<% 
+	String orderNumber = request.getParameter("orderNumber");
+	if(orderNumber == null){
+		out.write("Sorry, please input a order number!");
+		return ;
+	}
+%>
 <html>
 <head>
 <title>Order Information</title>
@@ -12,6 +19,31 @@
 <script type="text/javascript" src="js/style-table.js"></script>
 </head>
 <body>
+<script type="text/javascript">
+	//Ajax调用处理
+	$(document).ready(function(){
+		$.ajax({
+			url: "http://localhost:9099/order/query/<%=orderNumber%>",   
+			type: "get",  
+			dataType: "json",
+			success: function(ret){  
+				if(ret == null){
+					alert('Sorry, there is not the order information!');
+				}else{
+					$('#orderNumber').html(ret.orderNumber);
+					$('#productModel').html(ret.productModel);
+					$('#quantity').html(ret.quantity);
+					$('#status').html(ret.status);
+					$('#shipping').html(ret.shipping);
+				}
+			},
+			error: function(err){
+				alert('sorry, here is error!');
+			}
+		});  
+	});//页面加载
+	
+</script>
 <div class="index-banner1">
   <div class="header-top">	
 	<div class="wrap">
@@ -116,27 +148,27 @@
 					<tbody>
 						<tr>
 							<th scope="row">Order Number</th>
-							<td><%=request.getAttribute("orderNumber")%></td>
+							<td id="orderNumber"></td>
 						</tr>
 						
 						<tr>
 							<th scope="row">Product Model</th>
-							<td><%=request.getAttribute("productModel")%></td>
+							<td id="productModel"></></td>
 						</tr>
 						
 						<tr>
 							<th scope="row">Quantity</th>
-							<td><%=request.getAttribute("quantity")%></td>
+							<td id="quantity"></></td>
 						</tr>
 						
 						<tr>
 							<th scope="row">Status</th>
-							<td><%=request.getAttribute("status")%></td>
+							<td id="status"></></td>
 						</tr>
 						
 						<tr>
 							<th scope="row">Shipping</th>
-							<td><%=request.getAttribute("shipping")%></td>
+							<td id="shipping"></></td>
 						</tr>
 						
 					</tbody>
