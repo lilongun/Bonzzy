@@ -16,7 +16,7 @@
      </resultMap>
 
      <select id="queryOrderInfomationByOrderNumber" resultMap="order">
-        select id,order_number,product_model,quantity,status,quality_check,shipping,created_date,created_by,last_modified_date,last_modified_by
+        select id,order_number,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by
          from order_info where order_number=#{orderNumber}
      </select>
 
