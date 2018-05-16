@@ -69,8 +69,9 @@
 						    <!--<h1>Photos, illustrations by<br> Creatives all over the world.</h1>-->
 						     <div class="search_box">
 								<form id="queryForm">
-								   <input type="text" id="orderNumber" value="Order Number" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Order Number';}"><input id="toQuery" type="button" value="" />
-							    </form>
+								   <!--<input type="text" id="orderNumber" value="<%=orderNumber%>" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Order Number';}"><input id="toQuery" type="button" value="">-->
+									   <input type="text" id="orderNumber" value="Order Number" onfocus="if(this.value=='Order Number')this.value = '';" onblur="if (this.value == '') {this.value = 'Order Number';}"><input id="toQuery" type="button" value="">
+								</form>
 			 				</div>
 						</div>
 					</div>

@@ -121,10 +121,32 @@
 				   
 				   
 					<div class="search_box" style="border:1px solid #E1E2E2; width:35%">
-						<form action="contact.html">
-						   <input type="text" value="Order Number" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Order Number';}"><input type="submit" value="">
+						<form>
+						   <!--<input type="text" id="orderNumberInput" value="<%=orderNumber%>" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Order Number';}"><input id="toQuery" type="button" value="">-->
+						   <input type="text" id="orderNumberInput" value="<%=orderNumber%>" onfocus="if(this.value=='Order Number')this.value = '';" onblur="if (this.value == '') {this.value = 'Order Number';}"><input id="toQuery" type="button" value="">
 						</form>
 					</div>
+					<script type="text/javascript">
+						$('#toQuery').click(function(){
+							var orderNumber = $('#orderNumberInput').val();
+							 //Ajax调用处理
+							$.ajax({  
+								url: "http://localhost:9099/order/query/"+orderNumber,   
+								type: "get",  
+								dataType: "json",
+								success: function(ret){  
+									if(ret == null){
+										alert('Sorry, there is no the order information!');
+									}else{
+										window.location.href="order.jsp?orderNumber="+orderNumber;
+									}
+								},
+								error: function(err){
+									alert('sorry, here is error!');
+								}
+							});  
+						});
+					</script>
 					<!--
 					<br/>
 				   <h3>Order Information</h3>
@@ -175,7 +197,7 @@
 
 				</table>
 			
-				<div style="background: none repeat scroll 0 0 #82C400;
+				<div id="qualityCheckButton" style="background: none repeat scroll 0 0 #82C400;
 							width:130px; 
 							height:42px; 
 							border-width: 0; 
@@ -189,7 +211,11 @@
 							line-height:42px;" onclick="javascript:window.location.href='qualitycheck.html'">
 					Quality Check
 				</div>
-			
+				<script type="text/javascript">
+					$('#qualityCheckButton').click(function(){
+						window.location.href="qualitycheck.jsp?orderNumber=<%=orderNumber%>";
+					});
+				</script>
 
 				
 				<!--
