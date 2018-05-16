@@ -3,9 +3,9 @@ package com.bonzzy.webproject.controller;
 import com.bonzzy.webproject.domain.OrderInfo;
 import com.bonzzy.webproject.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by lilongyun on 2018/5/10.
  */
-@RestController
+@Controller
 public class OrderController {
     @Autowired
     private OrderService orderService;

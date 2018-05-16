@@ -1,6 +1,9 @@
 spring:
   application:
       name: webproject
+  mvc:
+    view:
+      suffix: .jsp
 
   datasource:
     url: jdbc:mysql://localhost:3306/order
