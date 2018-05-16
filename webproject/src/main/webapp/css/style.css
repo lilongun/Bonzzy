@@ -1050,6 +1050,17 @@ p.m_6{
 	/*display: block;*/
 	font-family: 'Raleway', sans-serif;
 }
+.comments-area input[type="password"] {
+	padding: 7px 15px;
+	width: 100%;
+	color: #777;
+	font-size:1em;
+	border: none;
+	background:#E4E4E4;
+	outline: none;
+	/*display: block;*/
+	font-family: 'Raleway', sans-serif;
+}
 .comments-area textarea {
 	padding: 7px 15px;
 	width: 70%;
@@ -1073,6 +1084,20 @@ p.m_6{
 	font-size:1em;
 }
 .comments-area input[type="submit"]:hover{
+	background:#62A7B8;
+}
+
+.comments-area input[type="button"] {
+	padding: 8px 15px;
+	color: #F0F0F0;
+	background: #3D3D3D;
+	border:none;
+	cursor: pointer;
+	outline:none;
+	font-family: 'Raleway', sans-serif;
+	font-size:1em;
+}
+.comments-area input[type="button"]:hover{
 	background:#62A7B8;
 }
 

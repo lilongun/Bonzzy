@@ -69,16 +69,39 @@
 					<form>
 						<p>
 							<label>Name</label>
-							<input type="text" value="">
+							<input id="name" type="text" value="">
 						</p>
 						<p>
 							<label>Password</label>
-							<input type="text" value="">
+							<input id="password" type="password" value="">
 						</p>
 						<p>
-							<input type="submit" value="Login">
+							<input id="loginButton" type="button" value="Login">
 						</p>
 					</form>
+					<script>
+					$('#loginButton').click(function(){
+						var name = $('#name').val();
+						var password = $('#password').val();
+						$.ajax({
+							url: 'http://localhost:9099/auth/oauth/token?grant_type=password&username='+ name +'&password=' + password,
+							dataType: "json",
+							/*username: "bonzzy",
+							password: "bonzzy",*/
+							async: false,
+							headers: {
+								"Authorization": "Basic " + btoa("bonzzy" + ":" + "bonzzy")
+							},
+							type: "POST",
+							success:function (data) {
+								alert(data.access_token);
+							},
+							error:function(){
+								alert("Sorry, incorrect user or password, please input again!");
+							}
+						});
+					});
+					</script>
 				</div>
 		  </div>
 		</div>
