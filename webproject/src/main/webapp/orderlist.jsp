@@ -2,9 +2,14 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <% 
 	String access_token = request.getParameter("access_token");
+	String pageNum = request.getParameter("pageNum");
+	String orderNumber = request.getParameter("orderNumber");
 	if(access_token == null){
 		out.write("Sorry, please login first!");
 		return ;
+	}
+	if( pageNum == null ){
+		pageNum = "1";
 	}
 %>
 <html>
@@ -15,6 +20,8 @@
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 <script src="js/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="css/css-table.css" />
+<script type="text/javascript" src="js/style-table.js"></script>
 </head>
 <body>
 <script type="text/javascript">
@@ -44,6 +51,136 @@
 					alert("Sorry, you are not a admin, cannot manage orders!");
 					return;
 				}
+				
+				$.ajax({
+					url: "http://localhost:9099/order/queryList?access_token=<%=access_token%>&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",   
+					type: "get",  
+					dataType: "json",
+					/*username: "bonzzy",
+					password: "bonzzy",*/
+					async: false,
+					success:function (data) {
+						currentPage = <%=pageNum%>;
+						
+						if(currentPage > 1){
+							$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (currentPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" +'" class="previous">Previous</a></li>');
+						}else{
+							$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum=1'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="previous">Previous</a></li>');
+						}
+						$('#pageUl').append($pageLi);
+						
+						if(data.totalPage < 9){
+							for( i=0; i<data.totalPage; i++ ){
+								if(currentPage == i+1){
+									$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
+								}else{
+									$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
+								}
+								$('#pageUl').append($pageLi);
+							}
+						}else{
+							if( currentPage < 6 ){
+								for( i=0; i<6; i++ ){
+									if(currentPage == i+1){
+										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
+									}else{
+										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
+									}
+									$('#pageUl').append($pageLi);
+								}
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (data.totalPage-2) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
+								$('#pageUl').append($pageLi);
+								for( i=data.totalPage-2; i<data.totalPage; i++ ){
+									if(currentPage == i+1){
+										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
+									}else{
+										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
+									}
+									$('#pageUl').append($pageLi);
+								}
+							}else if( currentPage > data.totalPage-5 ){
+								for( i=0; i<2; i++ ){
+									if(currentPage == i+1){
+										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
+									}else{
+										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
+									}
+									$('#pageUl').append($pageLi);
+								}
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum=3'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
+								$('#pageUl').append($pageLi);
+								for( i=data.totalPage-5; i<data.totalPage+1; i++ ){
+									if(currentPage == i){
+										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ i + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+i+'</a></li>');
+									}else{
+										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ i + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+i+'</a></li>');
+									}
+									$('#pageUl').append($pageLi);
+								}					
+							}else{
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum=1'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">1</a></li>');
+								$('#pageUl').append($pageLi);
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum=2'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
+								$('#pageUl').append($pageLi);
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (currentPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(currentPage-1)+'</a></li>');
+								$('#pageUl').append($pageLi);
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ currentPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+currentPage+'</a></li>');
+								$('#pageUl').append($pageLi);
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (currentPage+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(currentPage+1)+'</a></li>');
+								$('#pageUl').append($pageLi);
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (data.totalPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
+								$('#pageUl').append($pageLi);
+								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ data.totalPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+data.totalPage+'</a></li>');
+								$('#pageUl').append($pageLi);
+							}
+						}
+					
+						if( currentPage < data.totalPage ){
+							$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (currentPage+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
+						}else{
+							$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ data.totalPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
+						}
+						$('#pageUl').append($pageLi);
+						
+						if(data.list.length == 0){
+							$('#order').hide();
+							return;
+						}
+						$('#order').show();
+						for( i=0; i<data.list.length; i++){
+							$orderNumber=$("<td>"+ data.list[i].orderNumber +"</td>");
+							$productModel=$("<td>"+ data.list[i].productModel +"</td>");
+							$quantity=$("<td>"+ data.list[i].quantity +"</td>");
+							$status=$("<td>"+ data.list[i].status +"</td>");
+							$shipping=$("<td>"+ data.list[i].shipping +"</td>");
+							$operation=$('<td><a style="color:#A67D3D" href="#">edit</a><font style="color:#999 !important">/</font><a style="color:#A67D3D" href="#">delete</a></td>');
+							$orderInfo=$("<tr></tr>");
+							$orderInfo.append($orderNumber);
+							$orderInfo.append($productModel);
+							$orderInfo.append($quantity);
+							$orderInfo.append($status);
+							$orderInfo.append($shipping);
+							$orderInfo.append($operation);
+							
+							$("#order").children('tbody').append($orderInfo);
+						}
+						
+						$('tbody tr').hover(function() {
+						  $(this).addClass('odd');
+						}, function() {
+						  $(this).removeClass('odd');
+						});
+						
+						$('tbody tr td a').hover(function() {
+						  $(this).css('text-decoration','underline');
+						}, function() {
+						  $(this).css('text-decoration','none');
+						});
+					},
+					error:function(){
+						alert("Sorry, server exception!");
+					}
+				});  
 			},
 			error:function(){
 				alert("Sorry, server exception!");
@@ -55,9 +192,9 @@
 <div class="index-banner1">
   <div class="header-top">	
 	<div class="wrap">
-   		<div class="logo">
+   		<!--<div class="logo">
 			<a href="index.html"><img src="images/logo.png" alt=""/></a>
-		</div>	
+		</div>	-->
 		<div class="menu">																
 			<a href="#" class="right_bt" id="activator"><img src="images/nav_icon.png" alt=""></a>
 				<div class="box" id="box">
@@ -106,113 +243,63 @@
    	   <div class="main">
    	     <div class="wrap">
    	       <div class="abstract">
-		   	 <ul class="breadcrumb breadcrumb__t"><a class="home" href="#">Blog</a>  / About</ul>
-		   	 <div class="blog-top">
-				<div class="col_1_of_b span_1_of_b">
-					<h3><a href="single.html">Lorem Ipsum is simply</a></h3>
-					<a href="single.html"><img src="images/b1.jpg" alt=""/></a>
-					<div class="links">
-			  		    <ul>
-			  			   <li><img src="images/date.png" title="date"><span>Feb 14, 2014</span></li>
-			  			   <li><img src="images/author.png" title="Admin"><span>admin</span></li>
-			  			   <li><img src="images/comments.png" title="Comments"><span>No comments</span></li>
-			  			</ul>
-		  		    </div>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					<div class="button"><a href="#">Read More</a></div>
+		   	  <!--<div class="map">
+				 <iframe width="100%" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.co.in/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Lighthouse+Point,+FL,+United+States&amp;aq=4&amp;oq=light&amp;sll=26.275636,-80.087265&amp;sspn=0.04941,0.104628&amp;ie=UTF8&amp;hq=&amp;hnear=Lighthouse+Point,+Broward,+Florida,+United+States&amp;t=m&amp;z=14&amp;ll=26.275636,-80.087265&amp;output=embed"></iframe><br><small><a href="https://maps.google.co.in/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Lighthouse+Point,+FL,+United+States&amp;aq=4&amp;oq=light&amp;sll=26.275636,-80.087265&amp;sspn=0.04941,0.104628&amp;ie=UTF8&amp;hq=&amp;hnear=Lighthouse+Point,+Broward,+Florida,+United+States&amp;t=m&amp;z=14&amp;ll=26.275636,-80.087265" style="color:#666;text-align:left;font-size:12px">View Larger Map</a></small>
+			 </div>-->
+			 <div class="section group">
+				<div class="cont1 span_2_of_a1">
+				   
+					<div class="search_box" style="border:1px solid #E1E2E2; width:35%">
+						<form>
+						   <input type="text" id="orderNumberInput" value="<%=(orderNumber==null)?"Order Number":orderNumber%>" onfocus="if(this.value=='Order Number')this.value = '';" onblur="if (this.value == '') {this.value = 'Order Number';}"><input id="toQuery" type="button" value="">
+						</form>
+					</div>
+					<script type="text/javascript">
+						$('#toQuery').click(function(){
+							var orderNumber = $('#orderNumberInput').val();
+							if( orderNumber == '' ||  orderNumber == 'Order Number'){
+								window.location.href="orderlist.jsp?access_token=<%=access_token%>";  
+							}else{
+								window.location.href="orderlist.jsp?access_token=<%=access_token%>&orderNumber="+orderNumber;  
+							}
+						});
+					</script>
+				
 				</div>
-				<div class="col_1_of_b span_1_of_b">
-					<h3><a href="single.html">Lorem Ipsum is simply</a></h3>
-					<a href="single.html"><img src="images/b2.jpg" alt=""/></a>
-					<div class="links">
-			  		    <ul>
-			  			   <li><img src="images/date.png" title="date"><span>Feb 14, 2014</span></li>
-			  			   <li><img src="images/author.png" title="Admin"><span>admin</span></li>
-			  			   <li><img src="images/comments.png" title="Comments"><span>No comments</span></li>
-			  			</ul>
-		  		    </div>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					<div class="button"><a href="#">Read More</a></div>
-				</div>
-				<div class="clear"></div>
-		     </div>
-		     <div class="blog-top">
-				<div class="col_1_of_b span_1_of_b">
-					<h3><a href="single.html">Lorem Ipsum is simply</a></h3>
-					<a href="single.html"><img src="images/b3.jpg" alt=""/></a>
-					<div class="links">
-			  		    <ul>
-			  			   <li><img src="images/date.png" title="date"><span>Feb 14, 2014</span></li>
-			  			   <li><img src="images/author.png" title="Admin"><span>admin</span></li>
-			  			   <li><img src="images/comments.png" title="Comments"><span>No comments</span></li>
-			  			</ul>
-		  		    </div>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					<div class="button"><a href="#">Read More</a></div>
-				</div>
-				<div class="col_1_of_b span_1_of_b">
-					<h3><a href="single.html">Lorem Ipsum is simply</a></h3>
-					<a href="single.html"><img src="images/b4.jpg" alt=""/></a>
-					<div class="links">
-			  		    <ul>
-			  			   <li><img src="images/date.png" title="date"><span>Feb 14, 2014</span></li>
-			  			   <li><img src="images/author.png" title="Admin"><span>admin</span></li>
-			  			   <li><img src="images/comments.png" title="Comments"><span>No comments</span></li>
-			  			</ul>
-		  		    </div>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					<div class="button"><a href="#">Read More</a></div>
-				</div>
-				<div class="clear"></div>
-		     </div>
-		     <div class="blog-top1">
-				<div class="col_1_of_b span_1_of_b">
-					<h3><a href="single.html">Lorem Ipsum is simply</a></h3>
-					<a href="single.html"><img src="images/b5.jpg" alt=""/></a>
-					<div class="links">
-			  		    <ul>
-			  			   <li><img src="images/date.png" title="date"><span>Feb 14, 2014</span></li>
-			  			   <li><img src="images/author.png" title="Admin"><span>admin</span></li>
-			  			   <li><img src="images/comments.png" title="Comments"><span>No comments</span></li>
-			  			</ul>
-		  		    </div>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					<div class="button"><a href="#">Read More</a></div>
-				</div>
-				<div class="col_1_of_b span_1_of_b">
-					<h3><a href="single.html">Lorem Ipsum is simply</a></h3>
-					<a href="single.html"><img src="images/b6.jpg" alt=""/></a>
-					<div class="links">
-			  		    <ul>
-			  			   <li><img src="images/date.png" title="date"><span>Feb 14, 2014</span></li>
-			  			   <li><img src="images/author.png" title="Admin"><span>admin</span></li>
-			  			   <li><img src="images/comments.png" title="Comments"><span>No comments</span></li>
-			  			</ul>
-		  		    </div>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					<div class="button"><a href="#">Read More</a></div>
-				</div>
-				<div class="clear"></div>
+				
+				<table id="order" style="width:100%">
+					<caption>Order List</caption>
+					 <thead>    
+						<tr>
+							<th scope="col">Order Number</th>
+							<th scope="col">Product Model</th>
+							<th scope="col">Quantity</th>
+							<th scope="col">Status</th>
+							<th scope="col">Shipping</th>
+							<th scope="col">Operation</th>
+						</tr>        
+					</thead>
+					
+					<tbody>
+						
+					</tbody>
+
+				</table>
+				 <ul id="pageUl" class="dc_pagination dc_paginationA dc_paginationA06">
+					
+				  </ul>
+		        <div class="clear"></div>	
 		      </div>
-		      <ul class="dc_pagination dc_paginationA dc_paginationA06">
-				<li><a href="#" class="previous">Previous</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#" class="current">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-			    <li><a href="#">...</a></li>
-				<li><a href="#">19</a></li>
-			    <li><a href="#">20</a></li>
-				<li><a href="#" class="next">Next</a></li>
-		      </ul>
-		</div>
-   	  </div>
+		   </div>
+   	     </div>
    	</div>
 	<div class="footer">
 	   	<div class="wrap">
 	   		<div class="copy">
-			   <p>Copyright &copy; 2014.Company name All rights reserved.<a target="_blank" href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
+			   <p>
+			   Copyright &copy; 2018.Bonzzy All rights reserved.
+			   <!--<a target="_blank" href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>-->
+			   </p>
 		    </div>
 	   	</div>
     </div>
