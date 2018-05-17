@@ -83,6 +83,13 @@
 					$('#loginButton').click(function(){
 						var name = $('#name').val();
 						var password = $('#password').val();
+						if(name == ''){
+							alert('Please input name!');
+							return;
+						}else if(password == ''){
+							alert('Please input password!');
+							return;
+						}
 						$.ajax({
 							url: 'http://localhost:9099/auth/oauth/token?grant_type=password&username='+ name +'&password=' + password,
 							dataType: "json",
@@ -94,7 +101,11 @@
 							},
 							type: "POST",
 							success:function (data) {
-								alert(data.access_token);
+								if(data.access_token == null || data.access_token == '' || data.access_token == undefined){
+									alert("Sorry, server exception!");
+									return;
+								}
+								window.location.href = 'orderlist.jsp?access_token='+data.access_token;
 							},
 							error:function(){
 								alert("Sorry, incorrect user or password, please input again!");
