@@ -38,4 +38,8 @@ public class OrderInfo{
     private String lastModifiedBy;
 
     private Boolean isDeleted;
+
+    private int beginPos = 0;
+
+    private int pageSize = 10;
 }

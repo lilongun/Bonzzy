@@ -42,6 +42,7 @@
         <if test="shipping != null">
             and shipping=#{shipping}
         </if>
+        limit #{beginPos},#{pageSize}
     </select>
 
     <insert id="saveOrderInformation">
@@ -113,5 +114,22 @@
         where order_number=#{orderNumber}
     </update>
 
-
+    <select id="queryOrderCount" resultType="java.lang.Integer">
+        select count(1) from order_info where is_deleted=0
+        <if test="orderNumber != null">
+            and order_number=#{orderNumber}
+        </if>
+        <if test="productModel != null">
+            and product_model=#{productModel}
+        </if>
+        <if test="quantity != null">
+            and quantity=#{quantity}
+        </if>
+        <if test="status != null">
+            and status=#{status}
+        </if>
+        <if test="shipping != null">
+            and shipping=#{shipping}
+        </if>
+    </select>
 </mapper>

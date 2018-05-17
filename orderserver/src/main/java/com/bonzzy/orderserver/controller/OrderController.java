@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lilongyun on 2018/5/10.
@@ -41,9 +42,16 @@ public class OrderController {
     @RequestMapping(value="/queryList", method=RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAuthority('admin')")
-    public List<OrderInfo> queryList(@RequestParam(required = false) String orderNumber){
+    public Map<String, Object> queryList(@RequestParam(required = false) String orderNumber,
+                                         @RequestParam(required = false) Integer pageNum){
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setOrderNumber(orderNumber);
+        int pageSize = 10;
+        if(pageNum == null){
+            pageNum = 1;
+        }
+        orderInfo.setBeginPos((pageNum - 1) * pageSize);
+        orderInfo.setPageSize(pageSize);
         return orderService.queryOrderInfomations(orderInfo);
     }
 

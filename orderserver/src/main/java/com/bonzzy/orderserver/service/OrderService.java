@@ -3,6 +3,7 @@ package com.bonzzy.orderserver.service;
 import com.bonzzy.orderserver.domain.OrderInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lilongyun on 2018/5/15.
@@ -12,7 +13,7 @@ public interface OrderService {
 
     public String queryOrderQualityCheckByOrderNumber(String orderNumber);
 
-    public List<OrderInfo> queryOrderInfomations(OrderInfo orderInfo);
+    public Map<String, Object> queryOrderInfomations(OrderInfo orderInfo);
 
     public int saveOrderInformation(OrderInfo orderInfo);
 

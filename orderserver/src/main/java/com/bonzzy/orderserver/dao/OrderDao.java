@@ -19,4 +19,6 @@ public interface OrderDao {
     public int saveOrderInformation(OrderInfo orderInfo);
 
     public int updateOrderInformation(OrderInfo orderInfo);
+
+    public Integer queryOrderCount(OrderInfo orderInfo);
 }
