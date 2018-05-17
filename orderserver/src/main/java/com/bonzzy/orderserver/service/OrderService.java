@@ -11,4 +11,10 @@ public interface OrderService {
     public List<OrderInfo> queryOrderInfomationByOrderNumber(String orderNumber);
 
     public String queryOrderQualityCheckByOrderNumber(String orderNumber);
+
+    public List<OrderInfo> queryOrderInfomations(OrderInfo orderInfo);
+
+    public int saveOrderInformation(OrderInfo orderInfo);
+
+    public int updateOrderInformation(OrderInfo orderInfo);
 }

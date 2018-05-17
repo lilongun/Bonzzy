@@ -38,4 +38,49 @@ public class OrderController {
         return orderService.queryOrderQualityCheckByOrderNumber(orderNumber);
     }
 
+    @RequestMapping(value="/queryList", method=RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAuthority('admin')")
+    public List<OrderInfo> queryList(@RequestParam(required = false) String orderNumber){
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOrderNumber(orderNumber);
+        return orderService.queryOrderInfomations(orderInfo);
+    }
+
+    @RequestMapping(value="/saveOrder", method=RequestMethod.PUT)
+    @ResponseBody
+    @PreAuthorize("hasAuthority('admin')")
+    public String saveOrder(@RequestBody OrderInfo orderInfo){
+        int result = orderService.saveOrderInformation(orderInfo);
+        if(result == 1) {
+            return "success";
+        }
+        return "fail";
+    }
+
+    @RequestMapping(value="/updateOrder", method=RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAuthority('admin')")
+    public String updateOrder(@RequestBody OrderInfo orderInfo){
+        int result = orderService.updateOrderInformation(orderInfo);
+        if(result == 1) {
+            return "success";
+        }
+        return "fail";
+    }
+
+    @RequestMapping(value="/deleteOrder/{orderNumber}", method=RequestMethod.DELETE)
+    @ResponseBody
+    @PreAuthorize("hasAuthority('admin')")
+    public String deleteOrder(@PathVariable("orderNumber") String orderNumber){
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOrderNumber(orderNumber);
+        orderInfo.setIsDeleted(true);
+        int result = orderService.updateOrderInformation(orderInfo);
+        if(result == 1) {
+            return "success";
+        }
+        return "fail";
+    }
+
 }

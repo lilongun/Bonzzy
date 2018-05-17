@@ -36,4 +36,6 @@ public class OrderInfo{
     private Date lastModifiedDate;
 
     private String lastModifiedBy;
+
+    private Boolean isDeleted;
 }

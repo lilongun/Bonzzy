@@ -17,11 +17,101 @@
 
      <select id="queryOrderInfomationByOrderNumber" resultMap="order">
         select id,order_number,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by
-         from order_info where order_number=#{orderNumber}
+         from order_info where order_number=#{orderNumber} and is_deleted=0
      </select>
 
     <select id="queryOrderQualityCheckByOrderNumber" resultType="java.lang.String">
-        select quality_check from order_info where order_number=#{orderNumber}
+        select quality_check from order_info where order_number=#{orderNumber} and is_deleted=0
     </select>
+
+    <select id="queryOrderInfomations" resultMap="order">
+        select id,order_number,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by
+        from order_info where is_deleted=0
+        <if test="orderNumber != null">
+           and order_number=#{orderNumber}
+        </if>
+        <if test="productModel != null">
+            and product_model=#{productModel}
+        </if>
+        <if test="quantity != null">
+            and quantity=#{quantity}
+        </if>
+        <if test="status != null">
+            and status=#{status}
+        </if>
+        <if test="shipping != null">
+            and shipping=#{shipping}
+        </if>
+    </select>
+
+    <insert id="saveOrderInformation">
+        insert into order_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNumber != null">
+                order_number,
+            </if>
+            <if test="productModel != null">
+                product_model,
+            </if>
+            <if test="quantity != null">
+                quantity,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="shipping != null">
+                shipping,
+            </if>
+            <if test="qualityCheck != null">
+                quality_check,
+            </if>
+        </trim>
+        <trim prefix=" values(" suffix=")" suffixOverrides=",">
+            <if test="orderNumber != null">
+                #{orderNumber},
+            </if>
+            <if test="productModel != null">
+                #{productModel},
+            </if>
+            <if test="quantity != null">
+                #{quantity},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="shipping != null">
+                #{shipping},
+            </if>
+            <if test="qualityCheck != null">
+                #{qualityCheck},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateOrderInformation">
+        update order_info
+        <set>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted},
+            </if>
+            <if test="productModel != null">
+                product_model = #{productModel},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="shipping != null">
+                shipping = #{shipping},
+            </if>
+            <if test="qualityCheck != null">
+                quality_check = #{qualityCheck},
+            </if>
+        </set>
+        where order_number=#{orderNumber}
+    </update>
+
 
 </mapper>
