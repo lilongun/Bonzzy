@@ -110,8 +110,11 @@
             <if test="qualityCheck != null">
                 quality_check = #{qualityCheck},
             </if>
+            <if test="orderNumber != null">
+                order_number = #{orderNumber},
+            </if>
         </set>
-        where order_number=#{orderNumber}
+        where id=#{id}
     </update>
 
     <select id="queryOrderCount" resultType="java.lang.Integer">

@@ -77,12 +77,12 @@ public class OrderController {
         return "fail";
     }
 
-    @RequestMapping(value="/deleteOrder/{orderNumber}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/deleteOrder/{id}", method=RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasAuthority('admin')")
-    public String deleteOrder(@PathVariable("orderNumber") String orderNumber){
+    public String deleteOrder(@PathVariable("orderNumber") Integer id){
         OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setOrderNumber(orderNumber);
+        orderInfo.setId(id);
         orderInfo.setIsDeleted(true);
         int result = orderService.updateOrderInformation(orderInfo);
         if(result == 1) {
