@@ -1101,6 +1101,23 @@ p.m_6{
 	background:#62A7B8;
 }
 
+.quality-area label {
+	display: block;
+	color: #999;
+	font-size: 0.85em;
+}
+
+.quality-area input[type="text"] {
+	padding: 7px 15px;
+	width: 40%;
+	color: #777;
+	font-size:1em;
+	border: none;
+	background:#E4E4E4;
+	outline: none;
+	/*display: block;*/
+	font-family: 'Raleway', sans-serif;
+}
 .quality-area p {
 	position: relative;
 	padding: 8px 0;
@@ -1116,6 +1133,36 @@ p.m_6{
 	font-size:1em;
 }
 .quality-area input[type="submit"]:hover{
+	background:#62A7B8;
+}
+
+.quality-area input[type="button"] {
+	padding: 8px 15px;
+	color: #F0F0F0;
+	background: #3D3D3D;
+	border:none;
+	cursor: pointer;
+	outline:none;
+	font-family: 'Raleway', sans-serif;
+	font-size:1em;
+}
+.quality-area input[type="button"]:hover{
+	background:#62A7B8;
+}
+
+.buttonClass{
+	padding: 8px 8px;
+	text-align:center;
+	width:85px; 
+	color: #F0F0F0;
+	background: #3D3D3D;
+	border:none;
+	cursor: pointer;
+	outline:none;
+	font-family: 'Raleway', sans-serif;
+	font-size:1em;
+}
+.buttonClass:hover{
 	background:#62A7B8;
 }
 

@@ -5,7 +5,7 @@ spring:
       name: orderserver
 
   datasource:
-    url: jdbc:mysql://localhost:3306/order
+    url: jdbc:mysql://localhost:3306/order?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver

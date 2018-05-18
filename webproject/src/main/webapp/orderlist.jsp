@@ -267,9 +267,31 @@
 				
 				</div>
 				
+				
 				<table id="order" style="width:100%">
-					<caption>Order List</caption>
-					 <thead>    
+					<caption>
+					<!--<div id="qualityCheckButton" style="background: none repeat scroll 0 0 #82C400;
+							width:100px; 
+							height:30px; 
+							border-width: 0; 
+							font-size: 17px; 
+							color: #FFFFFF; 
+							font-weight: 500; 
+							border-radius: 6px; 
+							cursor:pointer;
+							text-align:center;
+							vertical-align:middle;
+							line-height:30px;" onclick="javascript:window.location.href='ordereditor.jsp'">
+					Add Order
+					</div>-->
+					<div class="buttonClass" onclick="javascript:window.location.href='ordereditor.jsp?access_token=<%=access_token%>'">
+						Add Order
+					</div>
+					</caption>
+					 <thead>
+						<tr>
+							<th colspan="6">Order List</th>
+						</tr>
 						<tr>
 							<th scope="col">Order Number</th>
 							<th scope="col">Product Model</th>
@@ -288,6 +310,7 @@
 				 <ul id="pageUl" class="dc_pagination dc_paginationA dc_paginationA06">
 					
 				  </ul>
+				
 		        <div class="clear"></div>	
 		      </div>
 		   </div>

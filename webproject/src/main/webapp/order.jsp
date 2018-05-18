@@ -197,7 +197,7 @@
 					</tbody>
 
 				</table>
-			
+				<!--
 				<div id="qualityCheckButton" style="background: none repeat scroll 0 0 #82C400;
 							width:130px; 
 							height:42px; 
@@ -211,6 +211,10 @@
 							vertical-align:middle;
 							line-height:42px;" onclick="javascript:window.location.href='qualitycheck.html'">
 					Quality Check
+				</div>
+				-->
+				<div id="qualityCheckButton" class="buttonClass" style="font-size: 17px; width: 120px;">
+						Quality Check
 				</div>
 				<script type="text/javascript">
 					$('#qualityCheckButton').click(function(){

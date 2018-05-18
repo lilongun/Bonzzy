@@ -54,14 +54,14 @@ table {
 		width: 30%;
 		font-size:15px;
 		text-align:left;
-		background:#66CCFF;
+		background:#91c5d4;
 		}
 		
 	tbody td,
 	tfoot td {
 		font-size:15px;
 		text-align:center;
-		background:#99CCFF;
+		background:#d5eaf0;;
 		}
 		
 	tfoot th {
