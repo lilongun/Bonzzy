@@ -2,12 +2,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://ckeditor.com" prefix="ckeditor" %>
 <% 
-	String access_token = request.getParameter("access_token");
 	String id = request.getParameter("id");
-	if(access_token == null){
-		out.write("Sorry, please login first!");
-		return ;
-	}
 %>
 <html>
 <head>
@@ -16,15 +11,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 <script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script src="jquery.confirm/jquery.confirm.js"></script>
 <link rel="stylesheet" type="text/css" href="jquery.confirm/jquery.confirm.css" />
 </head>
 <body>
 <script type="text/javascript">
+	access_token = $.cookie('access_token');
+	if(access_token == null){
+		window.location.href = '404.html';
+	}
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://localhost:9099/auth/user?access_token=<%=access_token%>",   
+			url: "http://localhost:9099/auth/user?access_token="+access_token,   
 			type: "get",  
 			dataType: "json",
 			/*username: "bonzzy",
@@ -86,7 +86,7 @@
 				if(id != null && id.trim() != "" ){
 				%>
 					$.ajax({
-						url: "http://localhost:9099/order/queryList?access_token=<%=access_token%>&id=<%=id%>",   
+						url: "http://localhost:9099/order/queryList?access_token="+ access_token +"&id=<%=id%>",   
 						type: "get",  
 						dataType: "json",
 						async: false,
@@ -243,7 +243,7 @@
 					</p>
 					<p>
 						<input id="submitOrder" type="button" value="Submit">
-						<input type="button" value="Cancel" onclick="window.location.href='orderlist.jsp?access_token=<%=access_token%>'">
+						<input type="button" value="Cancel" onclick="window.location.href='orderlist.jsp'">
 					</p>
 				</form>
 				<ckeditor:replace replace="qualityCheck" basePath="ckeditor/" />
@@ -262,7 +262,7 @@
 							var check = CKEDITOR.instances.qualityCheck.getData().replace(reg , "").replace(reg2, "'");
 							if(id == ''){
 								$.ajax({
-									url: "http://localhost:9099/order/saveOrder?access_token=<%=access_token%>",   
+									url: "http://localhost:9099/order/saveOrder?access_token="+access_token,   
 									type: "put",  
 									//dataType: "json",
 									contentType: "application/json; charset=UTF-8",
@@ -292,7 +292,7 @@
 											return;
 										}
 										if(data == 'success'){
-											window.location.href = 'orderlist.jsp?access_token=<%=access_token%>';
+											window.location.href = 'orderlist.jsp';
 										}else{
 											$.confirm({
 												'title'		: 'Tips',
@@ -321,7 +321,7 @@
 								});
 							}else{
 								$.ajax({
-									url: "http://localhost:9099/order/updateOrder?access_token=<%=access_token%>",   
+									url: "http://localhost:9099/order/updateOrder?access_token="+access_token,   
 									type: "post",  
 									//dataType: "json",
 									contentType: "application/json; charset=UTF-8",
@@ -351,7 +351,7 @@
 											return;
 										}
 										if(data == 'success'){
-											window.location.href = 'orderlist.jsp?access_token=<%=access_token%>';
+											window.location.href = 'orderlist.jsp';
 										}else{
 											$.confirm({
 												'title'		: 'Tips',

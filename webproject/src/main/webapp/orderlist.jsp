@@ -1,13 +1,8 @@
 <!DOCTYPE unspecified PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <% 
-	String access_token = request.getParameter("access_token");
 	String pageNum = request.getParameter("pageNum");
 	String orderNumber = request.getParameter("orderNumber");
-	if(access_token == null){
-		out.write("Sorry, please login first!");
-		return ;
-	}
 	if( pageNum == null ){
 		pageNum = "1";
 	}
@@ -20,6 +15,7 @@
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 <script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="css/css-table.css" />
 <script type="text/javascript" src="js/style-table.js"></script>
 <script src="jquery.confirm/jquery.confirm.js"></script>
@@ -27,6 +23,10 @@
 </head>
 <body>
 <script type="text/javascript">
+	access_token = $.cookie('access_token');
+	if(access_token == null){
+		window.location.href = '404.html';
+	}
 	function deleteOrder(id){
 		$.confirm({
 			'title'		: 'Delete Confirmation',
@@ -37,13 +37,13 @@
 					'action': function(){
 						//elem.slideUp();
 						$.ajax({
-							url: "http://localhost:9099/order/deleteOrder/"+ id +"?access_token=<%=access_token%>",   
+							url: "http://localhost:9099/order/deleteOrder/"+ id +"?access_token="+access_token,   
 							type: "delete",  
 							//dataType: "json",
 							async: false,
 							success:function (data) {
 								if( data == 'success' ){
-									window.location.href = 'orderlist.jsp?access_token=<%=access_token%>';
+									window.location.href = 'orderlist.jsp?access_token='+access_token;
 								}else{
 									$.confirm({
 										'title'		: 'Tips',
@@ -83,7 +83,7 @@
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://localhost:9099/auth/user?access_token=<%=access_token%>",   
+			url: "http://localhost:9099/auth/user?access_token="+access_token,   
 			type: "get",  
 			dataType: "json",
 			/*username: "bonzzy",
@@ -142,7 +142,7 @@
 				}
 				
 				$.ajax({
-					url: "http://localhost:9099/order/queryList?access_token=<%=access_token%>&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",   
+					url: "http://localhost:9099/order/queryList?access_token="+ access_token +"&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",   
 					type: "get",  
 					dataType: "json",
 					/*username: "bonzzy",
@@ -152,18 +152,18 @@
 						currentPage = <%=pageNum%>;
 						
 						if(currentPage > 1){
-							$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (currentPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" +'" class="previous">Previous</a></li>');
+							$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (currentPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" +'" class="previous">Previous</a></li>');
 						}else{
-							$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum=1'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="previous">Previous</a></li>');
+							$pageLi=$('<li><a href="orderlist.jsp?pageNum=1'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="previous">Previous</a></li>');
 						}
 						$('#pageUl').append($pageLi);
 						
 						if(data.totalPage < 9){
 							for( i=0; i<data.totalPage; i++ ){
 								if(currentPage == i+1){
-									$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
+									$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
 								}else{
-									$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
+									$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
 								}
 								$('#pageUl').append($pageLi);
 							}
@@ -171,63 +171,63 @@
 							if( currentPage < 6 ){
 								for( i=0; i<6; i++ ){
 									if(currentPage == i+1){
-										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
+										$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
 									}else{
-										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
+										$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
 									}
 									$('#pageUl').append($pageLi);
 								}
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (data.totalPage-2) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (data.totalPage-2) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
 								$('#pageUl').append($pageLi);
 								for( i=data.totalPage-2; i<data.totalPage; i++ ){
 									if(currentPage == i+1){
-										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
+										$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
 									}else{
-										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
+										$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
 									}
 									$('#pageUl').append($pageLi);
 								}
 							}else if( currentPage > data.totalPage-5 ){
 								for( i=0; i<2; i++ ){
 									if(currentPage == i+1){
-										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
+										$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+(i+1)+'</a></li>');
 									}else{
-										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
+										$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (i+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(i+1)+'</a></li>');
 									}
 									$('#pageUl').append($pageLi);
 								}
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum=3'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum=3'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
 								$('#pageUl').append($pageLi);
 								for( i=data.totalPage-5; i<data.totalPage+1; i++ ){
 									if(currentPage == i){
-										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ i + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+i+'</a></li>');
+										$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ i + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+i+'</a></li>');
 									}else{
-										$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ i + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+i+'</a></li>');
+										$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ i + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+i+'</a></li>');
 									}
 									$('#pageUl').append($pageLi);
 								}					
 							}else{
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum=1'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">1</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum=1'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">1</a></li>');
 								$('#pageUl').append($pageLi);
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum=2'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum=2'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
 								$('#pageUl').append($pageLi);
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (currentPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(currentPage-1)+'</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (currentPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(currentPage-1)+'</a></li>');
 								$('#pageUl').append($pageLi);
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ currentPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+currentPage+'</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ currentPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="current">'+currentPage+'</a></li>');
 								$('#pageUl').append($pageLi);
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (currentPage+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(currentPage+1)+'</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (currentPage+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+(currentPage+1)+'</a></li>');
 								$('#pageUl').append($pageLi);
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (data.totalPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (data.totalPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">...</a></li>');
 								$('#pageUl').append($pageLi);
-								$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ data.totalPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+data.totalPage+'</a></li>');
+								$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ data.totalPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '">'+data.totalPage+'</a></li>');
 								$('#pageUl').append($pageLi);
 							}
 						}
 					
 						if( currentPage < data.totalPage ){
-							$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ (currentPage+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
+							$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (currentPage+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
 						}else{
-							$pageLi=$('<li><a href="orderlist.jsp?access_token=<%=access_token%>&pageNum='+ data.totalPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
+							$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ data.totalPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
 						}
 						$('#pageUl').append($pageLi);
 						
@@ -242,7 +242,7 @@
 							$quantity=$("<td>"+ data.list[i].quantity +"</td>");
 							$status=$("<td>"+ data.list[i].status +"</td>");
 							$shipping=$("<td>"+ data.list[i].shipping +"</td>");
-							$operation=$('<td><a style="color:#A67D3D" href="ordereditor.jsp?access_token=<%=access_token%>&id='+ data.list[i].id +'">edit</a><font style="color:#999 !important">/</font><a style="color:#A67D3D" href="javascript:deleteOrder('+ data.list[i].id +')">delete</a></td>');
+							$operation=$('<td><a style="color:#A67D3D" href="ordereditor.jsp?id='+ data.list[i].id +'">edit</a><font style="color:#999 !important">/</font><a style="color:#A67D3D" href="javascript:deleteOrder('+ data.list[i].id +')">delete</a></td>');
 							$orderInfo=$("<tr></tr>");
 							$orderInfo.append($orderNumber);
 							$orderInfo.append($productModel);
@@ -381,9 +381,9 @@
 						$('#toQuery').click(function(){
 							var orderNumber = $('#orderNumberInput').val();
 							if( orderNumber == '' ||  orderNumber == 'Order Number'){
-								window.location.href="orderlist.jsp?access_token=<%=access_token%>";  
+								window.location.href="orderlist.jsp";  
 							}else{
-								window.location.href="orderlist.jsp?access_token=<%=access_token%>&orderNumber="+orderNumber;  
+								window.location.href="orderlist.jsp?orderNumber="+orderNumber;  
 							}
 						});
 					</script>
@@ -407,7 +407,7 @@
 							line-height:30px;" onclick="javascript:window.location.href='ordereditor.jsp'">
 					Add Order
 					</div>-->
-					<div class="buttonClass" onclick="javascript:window.location.href='ordereditor.jsp?access_token=<%=access_token%>'">
+					<div class="buttonClass" onclick="javascript:window.location.href='ordereditor.jsp'">
 						Add Order
 					</div>
 					</caption>
