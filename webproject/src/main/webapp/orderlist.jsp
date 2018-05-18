@@ -22,9 +22,64 @@
 <script src="js/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="css/css-table.css" />
 <script type="text/javascript" src="js/style-table.js"></script>
+<script src="jquery.confirm/jquery.confirm.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery.confirm/jquery.confirm.css" />
 </head>
 <body>
 <script type="text/javascript">
+	function deleteOrder(id){
+		$.confirm({
+			'title'		: 'Delete Confirmation',
+			'message'	: 'You are about to delete this order. <br />It cannot be restored at a later time! Continue?',
+			'buttons'	: {
+				'Yes'	: {
+					'class'	: 'blue',
+					'action': function(){
+						//elem.slideUp();
+						$.ajax({
+							url: "http://localhost:9099/order/deleteOrder/"+ id +"?access_token=<%=access_token%>",   
+							type: "delete",  
+							//dataType: "json",
+							async: false,
+							success:function (data) {
+								if( data == 'success' ){
+									window.location.href = 'orderlist.jsp?access_token=<%=access_token%>';
+								}else{
+									$.confirm({
+										'title'		: 'Tips',
+										'message'	: 'Delete order failed!',
+										'buttons'	: {
+											'OK': {
+												'class'	: 'gray',
+												'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+											}
+										}
+									});
+								}
+							},
+							error:function(data) {
+								$.confirm({
+									'title'		: 'Tips',
+									'message'	: 'Sorry, server exception!',
+									'buttons'	: {
+										'OK': {
+											'class'	: 'gray',
+											'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+										}
+									}
+								});
+							}
+						});
+					}
+				},
+				'NO': {
+					'class'	: 'gray',
+					'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+				}
+			}
+		});
+	}
+
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
@@ -37,7 +92,24 @@
 			type: "GET",
 			success:function (data) {
 				if(data.authorities == null || data.authorities == '' || data.authorities == undefined){
-					alert("Sorry, server exception!");
+					$.confirm({
+						//'title'		: 'Delete Confirmation',
+						'title'		: 'Tips',
+						//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+						'message'	: 'Sorry, server exception!',
+						'buttons'	: {
+							/*'Yes'	: {
+								'class'	: 'blue',
+								'action': function(){
+									elem.slideUp();
+								}
+							},*/
+							'OK': {
+								'class'	: 'gray',
+								'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+							}
+						}
+					});
 					return;
 				}
 				isAdmin = false;
@@ -48,7 +120,24 @@
 					}
 				}
 				if(!isAdmin){
-					alert("Sorry, you are not a admin, cannot manage orders!");
+					$.confirm({
+						//'title'		: 'Delete Confirmation',
+						'title'		: 'Tips',
+						//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+						'message'	: 'Sorry, you are not a admin, cannot manage orders!',
+						'buttons'	: {
+							/*'Yes'	: {
+								'class'	: 'blue',
+								'action': function(){
+									elem.slideUp();
+								}
+							},*/
+							'OK': {
+								'class'	: 'gray',
+								'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+							}
+						}
+					});
 					return;
 				}
 				
@@ -153,7 +242,7 @@
 							$quantity=$("<td>"+ data.list[i].quantity +"</td>");
 							$status=$("<td>"+ data.list[i].status +"</td>");
 							$shipping=$("<td>"+ data.list[i].shipping +"</td>");
-							$operation=$('<td><a style="color:#A67D3D" href="#">edit</a><font style="color:#999 !important">/</font><a style="color:#A67D3D" href="#">delete</a></td>');
+							$operation=$('<td><a style="color:#A67D3D" href="#">edit</a><font style="color:#999 !important">/</font><a style="color:#A67D3D" href="javascript:deleteOrder('+ data.list[i].id +')">delete</a></td>');
 							$orderInfo=$("<tr></tr>");
 							$orderInfo.append($orderNumber);
 							$orderInfo.append($productModel);
@@ -178,12 +267,46 @@
 						});
 					},
 					error:function(){
-						alert("Sorry, server exception!");
+						$.confirm({
+							//'title'		: 'Delete Confirmation',
+							'title'		: 'Tips',
+							//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+							'message'	: 'Sorry, server exception!',
+							'buttons'	: {
+								/*'Yes'	: {
+									'class'	: 'blue',
+									'action': function(){
+										elem.slideUp();
+									}
+								},*/
+								'OK': {
+									'class'	: 'gray',
+									'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+								}
+							}
+						});
 					}
 				});  
 			},
 			error:function(){
-				alert("Sorry, server exception!");
+				$.confirm({
+					//'title'		: 'Delete Confirmation',
+					'title'		: 'Tips',
+					//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+					'message'	: 'Sorry, server exception!',
+					'buttons'	: {
+						/*'Yes'	: {
+							'class'	: 'blue',
+							'action': function(){
+								elem.slideUp();
+							}
+						},*/
+						'OK': {
+							'class'	: 'gray',
+							'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+						}
+					}
+				});
 			}
 		});  
 	});//页面加载

@@ -17,6 +17,8 @@
 <script src="js/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="css/css-table.css" />
 <script type="text/javascript" src="js/style-table.js"></script>
+<script src="jquery.confirm/jquery.confirm.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery.confirm/jquery.confirm.css" />
 </head>
 <body>
 <script type="text/javascript">
@@ -28,7 +30,24 @@
 			dataType: "json",
 			success: function(ret){  
 				if(ret == null){
-					alert('Sorry, there is not the order information!');
+					$.confirm({
+						//'title'		: 'Delete Confirmation',
+						'title'		: 'Tips',
+						//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+						'message'	: 'Sorry, there is not the order information!',
+						'buttons'	: {
+							/*'Yes'	: {
+								'class'	: 'blue',
+								'action': function(){
+									elem.slideUp();
+								}
+							},*/
+							'OK': {
+								'class'	: 'gray',
+								'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+							}
+						}
+					});
 				}else{
 					$('#orderNumber').html(ret.orderNumber);
 					$('#productModel').html(ret.productModel);
@@ -38,7 +57,24 @@
 				}
 			},
 			error: function(err){
-				alert('sorry, here is error!');
+				$.confirm({
+					//'title'		: 'Delete Confirmation',
+					'title'		: 'Tips',
+					//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+					'message'	: 'Sorry, server exception!',
+					'buttons'	: {
+						/*'Yes'	: {
+							'class'	: 'blue',
+							'action': function(){
+								elem.slideUp();
+							}
+						},*/
+						'OK': {
+							'class'	: 'gray',
+							'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+						}
+					}
+				});
 			}
 		});  
 	});//页面加载
@@ -137,13 +173,47 @@
 								dataType: "json",
 								success: function(ret){  
 									if(ret == null){
-										alert('Sorry, there is no the order information!');
+										$.confirm({
+											//'title'		: 'Delete Confirmation',
+											'title'		: 'Tips',
+											//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+											'message'	: 'Sorry, there is no the order information!',
+											'buttons'	: {
+												/*'Yes'	: {
+													'class'	: 'blue',
+													'action': function(){
+														elem.slideUp();
+													}
+												},*/
+												'OK': {
+													'class'	: 'gray',
+													'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+												}
+											}
+										});
 									}else{
 										window.location.href="order.jsp?orderNumber="+orderNumber;
 									}
 								},
 								error: function(err){
-									alert('sorry, here is error!');
+									$.confirm({
+										//'title'		: 'Delete Confirmation',
+										'title'		: 'Tips',
+										//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+										'message'	: 'Sorry, server exception!',
+										'buttons'	: {
+											/*'Yes'	: {
+												'class'	: 'blue',
+												'action': function(){
+													elem.slideUp();
+												}
+											},*/
+											'OK': {
+												'class'	: 'gray',
+												'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+											}
+										}
+									});
 								}
 							});  
 						});
