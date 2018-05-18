@@ -80,7 +80,7 @@ public class OrderController {
     @RequestMapping(value="/deleteOrder/{id}", method=RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasAuthority('admin')")
-    public String deleteOrder(@PathVariable("orderNumber") Integer id){
+    public String deleteOrder(@PathVariable("id") Integer id){
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setId(id);
         orderInfo.setIsDeleted(true);
