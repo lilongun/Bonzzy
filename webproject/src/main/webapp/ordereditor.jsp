@@ -3,7 +3,7 @@
 <%@ taglib uri="http://ckeditor.com" prefix="ckeditor" %>
 <% 
 	String access_token = request.getParameter("access_token");
-	String orderNumber = request.getParameter("orderNumber");
+	String id = request.getParameter("id");
 	if(access_token == null){
 		out.write("Sorry, please login first!");
 		return ;
@@ -16,6 +16,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 <script src="js/jquery.min.js"></script>
+<script src="jquery.confirm/jquery.confirm.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery.confirm/jquery.confirm.css" />
 </head>
 <body>
 <script type="text/javascript">
@@ -31,8 +33,25 @@
 			type: "GET",
 			success:function (data) {
 				if(data.authorities == null || data.authorities == '' || data.authorities == undefined){
-					alert("Sorry, server exception!");
-					return;
+					$.confirm({
+						//'title'		: 'Delete Confirmation',
+						'title'		: 'Tips',
+						//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+						'message'	: 'Sorry, server exception!',
+						'buttons'	: {
+							/*'Yes'	: {
+								'class'	: 'blue',
+								'action': function(){
+									elem.slideUp();
+								}
+							},*/
+							'OK': {
+								'class'	: 'gray',
+								'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+							}
+						}
+					});
+					window.location.href="404.html";
 				}
 				isAdmin = false;
 				for( i=0; i<data.authorities.length; i++ ){
@@ -42,12 +61,96 @@
 					}
 				}
 				if(!isAdmin){
-					alert("Sorry, you are not a admin, cannot manage orders!");
-					return;
+					$.confirm({
+						//'title'		: 'Delete Confirmation',
+						'title'		: 'Tips',
+						//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+						'message'	: 'Sorry, you are not a admin, cannot manage orders!"',
+						'buttons'	: {
+							/*'Yes'	: {
+								'class'	: 'blue',
+								'action': function(){
+									elem.slideUp();
+								}
+							},*/
+							'OK': {
+								'class'	: 'gray',
+								'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+							}
+						}
+					});
+					window.location.href="404.html";
 				}
+				
+				<% 
+				if(id != null && id.trim() != "" ){
+				%>
+					$.ajax({
+						url: "http://localhost:9099/order/queryList?access_token=<%=access_token%>&id=<%=id%>",   
+						type: "get",  
+						dataType: "json",
+						async: false,
+						type: "GET",
+						success:function (data) {
+							if( data == null || data.list == null || data.list == undefined || data.list.length == 0 ){
+								$.confirm({
+									'title'		: 'Tips',
+									'message'	: 'Sorry, there is no the order information!',
+									'buttons'	: {
+										'OK': {
+											'class'	: 'gray',
+											'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+										}
+									}
+								});
+							}else{
+								$('#orderNumber').val(data.list[0].orderNumber);
+								$('#productModel').val(data.list[0].productModel);
+								$('#quantity').val(data.list[0].quantity);
+								$('#status').val(data.list[0].status);
+								$('#shipping').val(data.list[0].shipping);
+								$('#id').val(data.list[0].id);
+								//$('#qualityCheck').val(data.list[0].qualityCheck);
+								
+								CKEDITOR.instances.qualityCheck.setData(data.list[0].qualityCheck);
+							}
+						},
+						error:function(data){
+							$.confirm({
+								'title'		: 'Tips',
+								'message'	: 'Sorry, server exception!',
+								'buttons'	: {
+									'OK': {
+										'class'	: 'gray',
+										'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+									}
+								}
+							});
+						}
+					});
+				<%
+				}
+				%>
 			},
 			error:function(){
-				alert("Sorry, server exception!");
+				$.confirm({
+					//'title'		: 'Delete Confirmation',
+					'title'		: 'Tips',
+					//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+					'message'	: 'Sorry, server exception!',
+					'buttons'	: {
+						/*'Yes'	: {
+							'class'	: 'blue',
+							'action': function(){
+								elem.slideUp();
+							}
+						},*/
+						'OK': {
+							'class'	: 'gray',
+							'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+						}
+					}
+				});
 				window.location.href="404.html";
 			}
 		});  
@@ -110,6 +213,7 @@
    	     <div class="wrap" >
 			<div class="quality-area">
 				<form>
+					<input type="hidden" id="id" >
 					<p>
 						<label>Order Number</label>
 						<!--<span>*</span>-->
@@ -152,32 +256,129 @@
 							var quantity = $('#quantity').val();
 							var status = $('#status').val();
 							var shipping = $('#shipping').val();
+							var id = $('#id').val();
 							var reg=/\n/g;
 							var reg2=/\"/g;
 							var check = CKEDITOR.instances.qualityCheck.getData().replace(reg , "").replace(reg2, "'");
-							$.ajax({
-								url: "http://localhost:9099/order/saveOrder?access_token=<%=access_token%>",   
-								type: "put",  
-								//dataType: "json",
-								contentType: "application/json; charset=UTF-8",
-								data: 
-								'{"orderNumber" : "'+orderNumber+'","productModel" : "'+ productModel + '","quantity" : "' + quantity + '","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
-								async: false,
-								success:function (data) {
-									if(data == null || data == '' || data == undefined){
-										alert("Sorry, server exception!");
-										return;
+							if(id == ''){
+								$.ajax({
+									url: "http://localhost:9099/order/saveOrder?access_token=<%=access_token%>",   
+									type: "put",  
+									//dataType: "json",
+									contentType: "application/json; charset=UTF-8",
+									data: 
+									'{"orderNumber" : "'+orderNumber+'","productModel" : "'+ productModel + '","quantity" : "' + quantity + '","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
+									async: false,
+									success:function (data) {
+										if(data == null || data == '' || data == undefined){
+											$.confirm({
+												//'title'		: 'Delete Confirmation',
+												'title'		: 'Tips',
+												//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+												'message'	: 'Sorry, server exception!',
+												'buttons'	: {
+													/*'Yes'	: {
+														'class'	: 'blue',
+														'action': function(){
+															elem.slideUp();
+														}
+													},*/
+													'OK': {
+														'class'	: 'gray',
+														'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+													}
+												}
+											});
+											return;
+										}
+										if(data == 'success'){
+											window.location.href = 'orderlist.jsp?access_token=<%=access_token%>';
+										}else{
+											$.confirm({
+												'title'		: 'Tips',
+												'message'	: 'Sorry, submit order failed!',
+												'buttons'	: {
+													'OK': {
+														'class'	: 'gray',
+														'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+													}
+												}
+											});
+										}
+									},
+									error:function(data){
+										$.confirm({
+											'title'		: 'Tips',
+											'message'	: 'Sorry, server exception!',
+											'buttons'	: {
+												'OK': {
+													'class'	: 'gray',
+													'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+												}
+											}
+										});
 									}
-									if(data == 'success'){
-										window.location.href = 'orderlist.jsp?access_token=<%=access_token%>';
-									}else{
-										alert('Sorry, submit order failed!');
+								});
+							}else{
+								$.ajax({
+									url: "http://localhost:9099/order/updateOrder?access_token=<%=access_token%>",   
+									type: "post",  
+									//dataType: "json",
+									contentType: "application/json; charset=UTF-8",
+									data: 
+									'{"id": "'+ id +'", "orderNumber" : "'+orderNumber+'","productModel" : "'+ productModel + '","quantity" : "' + quantity + '","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
+									async: false,
+									success:function (data) {
+										if(data == null || data == '' || data == undefined){
+											$.confirm({
+												//'title'		: 'Delete Confirmation',
+												'title'		: 'Tips',
+												//'message'	: 'You are about to delete this item. <br />It cannot be restored at a later time! Continue?',
+												'message'	: 'Sorry, server exception!',
+												'buttons'	: {
+													/*'Yes'	: {
+														'class'	: 'blue',
+														'action': function(){
+															elem.slideUp();
+														}
+													},*/
+													'OK': {
+														'class'	: 'gray',
+														'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+													}
+												}
+											});
+											return;
+										}
+										if(data == 'success'){
+											window.location.href = 'orderlist.jsp?access_token=<%=access_token%>';
+										}else{
+											$.confirm({
+												'title'		: 'Tips',
+												'message'	: 'Sorry, submit order failed!',
+												'buttons'	: {
+													'OK': {
+														'class'	: 'gray',
+														'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+													}
+												}
+											});
+										}
+									},
+									error:function(data){
+										$.confirm({
+											'title'		: 'Tips',
+											'message'	: 'Sorry, server exception!',
+											'buttons'	: {
+												'OK': {
+													'class'	: 'gray',
+													'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+												}
+											}
+										});
 									}
-								},
-								error:function(data){
-									alert('Sorry, server exception!');
-								}
-							});
+								});
+							}
 						});
 					});
 				</script>

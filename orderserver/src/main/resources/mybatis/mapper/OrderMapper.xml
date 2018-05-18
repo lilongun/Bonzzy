@@ -25,7 +25,7 @@
     </select>
 
     <select id="queryOrderInfomations" resultMap="order">
-        select id,order_number,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by
+        select id,order_number,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by,quality_check
         from order_info where is_deleted=0
         <if test="orderNumber != null">
            and order_number=#{orderNumber}
@@ -41,6 +41,9 @@
         </if>
         <if test="shipping != null">
             and shipping=#{shipping}
+        </if>
+        <if test="id != null">
+            and id=#{id}
         </if>
         limit #{beginPos},#{pageSize}
     </select>

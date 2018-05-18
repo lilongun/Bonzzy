@@ -43,9 +43,11 @@ public class OrderController {
     @ResponseBody
     @PreAuthorize("hasAuthority('admin')")
     public Map<String, Object> queryList(@RequestParam(required = false) String orderNumber,
+                                         @RequestParam(required = false) Integer id,
                                          @RequestParam(required = false) Integer pageNum){
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setOrderNumber(orderNumber);
+        orderInfo.setId(id);
         int pageSize = 10;
         if(pageNum == null){
             pageNum = 1;

@@ -242,7 +242,7 @@
 							$quantity=$("<td>"+ data.list[i].quantity +"</td>");
 							$status=$("<td>"+ data.list[i].status +"</td>");
 							$shipping=$("<td>"+ data.list[i].shipping +"</td>");
-							$operation=$('<td><a style="color:#A67D3D" href="#">edit</a><font style="color:#999 !important">/</font><a style="color:#A67D3D" href="javascript:deleteOrder('+ data.list[i].id +')">delete</a></td>');
+							$operation=$('<td><a style="color:#A67D3D" href="ordereditor.jsp?access_token=<%=access_token%>&id='+ data.list[i].id +'">edit</a><font style="color:#999 !important">/</font><a style="color:#A67D3D" href="javascript:deleteOrder('+ data.list[i].id +')">delete</a></td>');
 							$orderInfo=$("<tr></tr>");
 							$orderInfo.append($orderNumber);
 							$orderInfo.append($productModel);
