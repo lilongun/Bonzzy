@@ -37,7 +37,7 @@
 					'action': function(){
 						//elem.slideUp();
 						$.ajax({
-							url: "http://localhost:9099/order/deleteOrder/"+ id +"?access_token="+access_token,   
+							url: "http://localhost:9099/order/deleteOrder/"+ id +"?access_token="+access_token,
 							type: "delete",  
 							//dataType: "json",
 							async: false,
@@ -83,7 +83,7 @@
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://localhost:9099/auth/user?access_token="+access_token,   
+			url: "http://localhost:9099/auth/user?access_token="+access_token,
 			type: "get",  
 			dataType: "json",
 			/*username: "bonzzy",
@@ -142,7 +142,7 @@
 				}
 				
 				$.ajax({
-					url: "http://localhost:9099/order/queryList?access_token="+ access_token +"&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",   
+					url: "http://localhost:9099/order/queryList?access_token="+ access_token +"&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",
 					type: "get",  
 					dataType: "json",
 					/*username: "bonzzy",
@@ -231,10 +231,10 @@
 						}
 						$('#pageUl').append($pageLi);
 						
-						if(data.list.length == 0){
+						/*if(data.list.length == 0){
 							$('#order').hide();
 							return;
-						}
+						}*/
 						$('#order').show();
 						for( i=0; i<data.list.length; i++){
 							$orderNumber=$("<td>"+ data.list[i].orderNumber +"</td>");
