@@ -21,7 +21,7 @@
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://localhost:9099/order/queryQualityCheck/<%=orderNumber%>",   
+			url: "http://47.254.71.40:9099/order/queryQualityCheck/<%=orderNumber%>",
 			type: "get",  
 			dataType: "text",
 			success: function(ret){  

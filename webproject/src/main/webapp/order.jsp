@@ -25,7 +25,7 @@
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://localhost:9099/order/query/<%=orderNumber%>",   
+			url: "http://47.254.71.40:9099/order/query/<%=orderNumber%>",
 			type: "get",  
 			dataType: "json",
 			success: function(ret){  
@@ -168,7 +168,7 @@
 							var orderNumber = $('#orderNumberInput').val();
 							 //Ajax调用处理
 							$.ajax({  
-								url: "http://localhost:9099/order/query/"+orderNumber,   
+								url: "http://47.254.71.40:9099/order/query/"+orderNumber,
 								type: "get",  
 								dataType: "json",
 								success: function(ret){  

@@ -24,7 +24,7 @@
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://localhost:9099/auth/user?access_token="+access_token,   
+			url: "http://47.254.71.40:9099/auth/user?access_token="+access_token,
 			type: "get",  
 			dataType: "json",
 			/*username: "bonzzy",
@@ -86,7 +86,7 @@
 				if(id != null && id.trim() != "" ){
 				%>
 					$.ajax({
-						url: "http://localhost:9099/order/queryList?access_token="+ access_token +"&id=<%=id%>",   
+						url: "http://47.254.71.40:9099/order/queryList?access_token="+ access_token +"&id=<%=id%>",
 						type: "get",  
 						dataType: "json",
 						async: false,
@@ -133,6 +133,7 @@
 				%>
 			},
 			error:function(){
+                window.location.href = 'login.html';
 				$.confirm({
 					//'title'		: 'Delete Confirmation',
 					'title'		: 'Tips',
@@ -263,7 +264,7 @@
 							var check = CKEDITOR.instances.qualityCheck.getData().replace(reg , "").replace(reg2, "'");
 							if(id == ''){
 								$.ajax({
-									url: "http://localhost:9099/order/saveOrder?access_token="+access_token,   
+									url: "http://47.254.71.40:9099/order/saveOrder?access_token="+access_token,
 									type: "put",  
 									//dataType: "json",
 									contentType: "application/json; charset=UTF-8",
@@ -322,7 +323,7 @@
 								});
 							}else{
 								$.ajax({
-									url: "http://localhost:9099/order/updateOrder?access_token="+access_token,   
+									url: "http://47.254.71.40:9099/order/updateOrder?access_token="+access_token,
 									type: "post",  
 									//dataType: "json",
 									contentType: "application/json; charset=UTF-8",

@@ -37,7 +37,7 @@
 					'action': function(){
 						//elem.slideUp();
 						$.ajax({
-							url: "http://localhost:9099/order/deleteOrder/"+ id +"?access_token="+access_token,
+							url: "http://47.254.71.40:9099/order/deleteOrder/"+ id +"?access_token="+access_token,
 							type: "delete",  
 							//dataType: "json",
 							async: false,
@@ -83,7 +83,7 @@
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://localhost:9099/auth/user?access_token="+access_token,
+			url: "http://47.254.71.40:9099/auth/user?access_token="+access_token,
 			type: "get",  
 			dataType: "json",
 			/*username: "bonzzy",
@@ -142,7 +142,7 @@
 				}
 				
 				$.ajax({
-					url: "http://localhost:9099/order/queryList?access_token="+ access_token +"&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",
+					url: "http://47.254.71.40:9099/order/queryList?access_token="+ access_token +"&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",
 					type: "get",  
 					dataType: "json",
 					/*username: "bonzzy",
@@ -295,6 +295,7 @@
 				});  
 			},
 			error:function(){
+			    window.location.href = 'login.html';
 				$.confirm({
 					//'title'		: 'Delete Confirmation',
 					'title'		: 'Tips',
