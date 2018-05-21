@@ -43,6 +43,13 @@
 			      </div>
 			                 <script type="text/javascript">
 								var $ = jQuery.noConflict();
+
+                                $(document).keyup(function(event){
+                                    if(event.keyCode ==13){
+                                        $("#loginButton").trigger("click");
+                                    }
+                                });
+
 									$(function() {
 										$('#activator').click(function(){
 												$('#box').animate({'top':'0px'},500);
