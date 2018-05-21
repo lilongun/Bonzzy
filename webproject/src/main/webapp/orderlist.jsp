@@ -150,12 +150,15 @@
 					async: false,
 					success:function (data) {
 						currentPage = <%=pageNum%>;
-						
-						if(currentPage > 1){
-							$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (currentPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" +'" class="previous">Previous</a></li>');
-						}else{
-							$pageLi=$('<li><a href="orderlist.jsp?pageNum=1'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="previous">Previous</a></li>');
+
+						if(data.list.length > 0){
+                            if(currentPage > 1){
+                                $pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (currentPage-1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" +'" class="previous">Previous</a></li>');
+                            }else{
+                                $pageLi=$('<li><a href="orderlist.jsp?pageNum=1'+ "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="previous">Previous</a></li>');
+                            }
 						}
+
 						$('#pageUl').append($pageLi);
 						
 						if(data.totalPage < 9){
@@ -223,12 +226,15 @@
 								$('#pageUl').append($pageLi);
 							}
 						}
-					
-						if( currentPage < data.totalPage ){
-							$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (currentPage+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
-						}else{
-							$pageLi=$('<li><a href="orderlist.jsp?pageNum='+ data.totalPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
-						}
+
+                        if(data.list.length > 0){
+                            if( currentPage < data.totalPage ){
+                                $pageLi=$('<li><a href="orderlist.jsp?pageNum='+ (currentPage+1) + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
+                            }else{
+                                $pageLi=$('<li><a href="orderlist.jsp?pageNum='+ data.totalPage + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>" + '" class="next">Next</a></li>');
+                            }
+                        }
+
 						$('#pageUl').append($pageLi);
 						
 						/*if(data.list.length == 0){
