@@ -95,7 +95,7 @@
 							if( data == null || data.list == null || data.list == undefined || data.list.length == 0 ){
 								$.confirm({
 									'title'		: 'Tips',
-									'message'	: 'Sorry, there is no the order information!',
+									'message'	: 'Sorry, there is no order information!',
 									'buttons'	: {
 										'OK': {
 											'class'	: 'gray',
@@ -222,20 +222,20 @@
 						<input id="orderNumber" type="text" value="">
 					</p>
 					<p>
-						<label>productModel</label>
+						<label>Product Model</label>
 						<!--<span>*</span>-->
 						<input id="productModel" type="text" value="">
 					</p>
 					<p>
-						<label>quantity</label>
+						<label>Quantity</label>
 						<input id="quantity" type="text" value="">
 					</p>
 					<p>
-						<label>status</label>
+						<label>Status</label>
 						<input id="status" type="text" value="">
 					</p>
 					<p>
-						<label>shipping</label>
+						<label>Shipping</label>
 						<input id="shipping" type="text" value="">
 					</p>
 					<p>
