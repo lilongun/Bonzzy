@@ -50,8 +50,16 @@
 					});
 				}else{
 					$('#orderNumber').html(ret.orderNumber);
-					$('#productModel').html(ret.productModel);
-					$('#quantity').html(ret.quantity);
+					productArray = JSON.parse(ret.product);
+					parseString = '';
+					for( j=0; j<productArray.length; j++ ){
+						parseString += productArray[j].productModel + " : " + productArray[j].quantity;
+						parseString += "<br/>";
+					}
+					parseString += '';
+					$('#product').html(parseString);
+					//$('#productModel').html(ret.productModel);
+					//$('#quantity').html(ret.quantity);
 					$('#status').html(ret.status);
 					$('#shipping').html(ret.shipping);
 				}
@@ -245,14 +253,22 @@
 						</tr>
 						
 						<tr>
+							<th scope="row">Product</th>
+							<td id="product"></></td>
+						</tr>
+						
+						<!--
+						<tr>
 							<th scope="row">Product Model</th>
 							<td id="productModel"></></td>
 						</tr>
+						
 						
 						<tr>
 							<th scope="row">Quantity</th>
 							<td id="quantity"></></td>
 						</tr>
+						-->
 						
 						<tr>
 							<th scope="row">Status</th>
