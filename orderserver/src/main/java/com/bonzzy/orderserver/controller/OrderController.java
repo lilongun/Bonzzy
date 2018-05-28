@@ -29,6 +29,8 @@ public class OrderController {
     public OrderInfo query(@PathVariable("orderNumber") String orderNumber){
        List<OrderInfo> list = orderService.queryOrderInfomationByOrderNumber(orderNumber);
        if(list.size() > 0){
+           JSONArray array = JSONArray.parseArray(list.get(0).getProduct());
+           list.get(0).setProduct(array.toJSONString());
            return list.get(0);
        }
        return null;

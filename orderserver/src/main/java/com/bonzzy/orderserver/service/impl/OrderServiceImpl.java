@@ -1,5 +1,6 @@
 package com.bonzzy.orderserver.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.bonzzy.orderserver.dao.OrderDao;
 import com.bonzzy.orderserver.domain.OrderInfo;
 import com.bonzzy.orderserver.service.OrderService;
@@ -33,6 +34,10 @@ public class OrderServiceImpl implements OrderService {
     public Map<String, Object> queryOrderInfomations(OrderInfo orderInfo) {
         Integer count = orderDao.queryOrderCount(orderInfo);
         List<OrderInfo> list =  orderDao.queryOrderInfomations(orderInfo);
+        for( OrderInfo order : list ){
+            JSONArray array = JSONArray.parseArray(order.getProduct());
+            order.setProduct(array.toJSONString());
+        }
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("totalPage", count%orderInfo.getPageSize()>0 ? count/orderInfo.getPageSize()+1 : count/orderInfo.getPageSize());
         map.put("list", list);
