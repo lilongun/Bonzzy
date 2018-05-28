@@ -24,7 +24,7 @@
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://47.254.71.40:9099/auth/user?access_token="+access_token,
+			url: "http://localhost:9099/auth/user?access_token="+access_token,
 			type: "get",  
 			dataType: "json",
 			/*username: "bonzzy",
@@ -86,7 +86,7 @@
 				if(id != null && id.trim() != "" ){
 				%>
 					$.ajax({
-						url: "http://47.254.71.40:9099/order/queryList?access_token="+ access_token +"&id=<%=id%>",
+						url: "http://localhost:9099/order/queryList?access_token="+ access_token +"&id=<%=id%>",
 						type: "get",  
 						dataType: "json",
 						async: false,
@@ -105,8 +105,19 @@
 								});
 							}else{
 								$('#orderNumber').val(data.list[0].orderNumber);
-								$('#productModel').val(data.list[0].productModel);
-								$('#quantity').val(data.list[0].quantity);
+								productArray = data.list[0].product;
+								jsonArray = JSON.parse(productArray);
+								if(jsonArray.length > 0){
+									$('input[name="productModel"]').val(jsonArray[0].productModel);
+									$('input[name="quantity"]').val(jsonArray[0].quantity);
+									var html = '';
+									for( i=1; i<jsonArray.length; i++ ){
+										html += '<p><span style="width:40%; display:inline-block"><label>Product Model</label><input value="'+ jsonArray[i].productModel +'" name="productModel" style="width:100%" type="text"></span> <span style="width:10%;display:inline-block"><label>Quantity</label><input value="'+ jsonArray[i].quantity +'" style="width:100%" name="quantity" type="text"></span></p>';
+									}
+									$('#statusSource').before(html);
+								}
+								//$('#productModel').val(data.list[0].productModel);
+								//$('#quantity').val(data.list[0].quantity);
 								$('#status').val(data.list[0].status);
 								$('#shipping').val(data.list[0].shipping);
 								$('#id').val(data.list[0].id);
@@ -221,16 +232,25 @@
 						<!--<span>*</span>-->
 						<input id="orderNumber" type="text" value="">
 					</p>
-					<p>
-						<label>Product Model</label>
-						<!--<span>*</span>-->
-						<input id="productModel" type="text" value="">
+					<p id="productModelSource">
+						<span style="width:40%; display:inline-block">
+							<label>Product Model</label>
+							<!--<span>*</span>-->
+							<input value="" name="productModel" style="width:100%" type="text">
+						</span>
+						<span style="width:10%;display:inline-block">
+							<label>Quantity</label>
+							<input value="" style="width:100%" name="quantity" type="text">
+						</span>
+						<span>
+							<input onclick="" value="Add" type="button" id="addModel">
+						</span>
 					</p>
-					<p>
+					<%--<p>
 						<label>Quantity</label>
-						<input id="quantity" type="text" value="">
-					</p>
-					<p>
+						<input id="" type="text" value="">
+					</p>--%>
+					<p id="statusSource">
 						<label>Status</label>
 						<input id="status" type="text" value="">
 					</p>
@@ -254,8 +274,14 @@
 					$(function() {
 						$('#submitOrder').click(function(){
 							var orderNumber = $('#orderNumber').val();
-							var productModel = $('#productModel').val();
-							var quantity = $('#quantity').val();
+							//var productModel = $('#productModel').val();
+							var productModelArray = $('input[name="productModel"]');
+							//var quantity = $('#quantity').val();
+                            var quantityArray = $('input[name="quantity"]');
+                            var productArray = [];
+                            for( i=0; i<productModelArray.length; i++ ){
+                                productArray.push( "{'productModel':'" + productModelArray[i].value + "', 'quantity':'" + quantityArray[i].value + "'}" );
+							}
 							var status = $('#status').val();
 							var shipping = $('#shipping').val();
 							var id = $('#id').val();
@@ -264,12 +290,13 @@
 							var check = CKEDITOR.instances.qualityCheck.getData().replace(reg , "").replace(reg2, "'");
 							if(id == ''){
 								$.ajax({
-									url: "http://47.254.71.40:9099/order/saveOrder?access_token="+access_token,
+									url: "http://localhost:9099/order/saveOrder?access_token="+access_token,
 									type: "put",  
 									//dataType: "json",
 									contentType: "application/json; charset=UTF-8",
 									data: 
-									'{"orderNumber" : "'+orderNumber+'","productModel" : "'+ productModel + '","quantity" : "' + quantity + '","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
+									'{"orderNumber" : "'+orderNumber+'","product" : "['+ productArray.toString() + ']","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
+									//'{"orderNumber" : "'+orderNumber+'","productModel" : "'+ productModel + '","quantity" : "' + quantity + '","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
 									async: false,
 									success:function (data) {
 										if(data == null || data == '' || data == undefined){
@@ -323,12 +350,13 @@
 								});
 							}else{
 								$.ajax({
-									url: "http://47.254.71.40:9099/order/updateOrder?access_token="+access_token,
+									url: "http://localhost:9099/order/updateOrder?access_token="+access_token,
 									type: "post",  
 									//dataType: "json",
 									contentType: "application/json; charset=UTF-8",
 									data: 
-									'{"id": "'+ id +'", "orderNumber" : "'+orderNumber+'","productModel" : "'+ productModel + '","quantity" : "' + quantity + '","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
+									'{"id": "'+ id +'","orderNumber" : "'+orderNumber+'","product" : "['+ productArray.toString() + ']","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
+									//'{"id": "'+ id +'", "orderNumber" : "'+orderNumber+'","productModel" : "'+ productModel + '","quantity" : "' + quantity + '","status" : "' + status + '","shipping" : "' + shipping + '","qualityCheck" : "' + check + '"}',
 									async: false,
 									success:function (data) {
 										if(data == null || data == '' || data == undefined){
@@ -382,6 +410,10 @@
 								});
 							}
 						});
+
+                        $('#addModel').click(function(){
+                            $('#statusSource').before('<p><span style="width:40%; display:inline-block"><label>Product Model</label><input value="" name="productModel" style="width:100%" type="text"></span> <span style="width:10%;display:inline-block"><label>Quantity</label><input value="" style="width:100%" name="quantity" type="text"></span></p>');
+                        });
 					});
 				</script>
 			</div>

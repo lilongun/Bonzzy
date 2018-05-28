@@ -37,7 +37,7 @@
 					'action': function(){
 						//elem.slideUp();
 						$.ajax({
-							url: "http://47.254.71.40:9099/order/deleteOrder/"+ id +"?access_token="+access_token,
+							url: "http://localhost:9099/order/deleteOrder/"+ id +"?access_token="+access_token,
 							type: "delete",  
 							//dataType: "json",
 							async: false,
@@ -83,7 +83,7 @@
 	//Ajax调用处理
 	$(document).ready(function(){
 		$.ajax({
-			url: "http://47.254.71.40:9099/auth/user?access_token="+access_token,
+			url: "http://localhost:9099/auth/user?access_token="+access_token,
 			type: "get",  
 			dataType: "json",
 			/*username: "bonzzy",
@@ -142,7 +142,7 @@
 				}
 				
 				$.ajax({
-					url: "http://47.254.71.40:9099/order/queryList?access_token="+ access_token +"&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",
+					url: "http://localhost:9099/order/queryList?access_token="+ access_token +"&pageNum=<%=pageNum%>" + "<%=(orderNumber == null)?"":"&orderNumber="+orderNumber%>",
 					type: "get",  
 					dataType: "json",
 					/*username: "bonzzy",
@@ -244,15 +244,23 @@
 						$('#order').show();
 						for( i=0; i<data.list.length; i++){
 							$orderNumber=$("<td>"+ data.list[i].orderNumber +"</td>");
-							$productModel=$("<td>"+ data.list[i].productModel +"</td>");
-							$quantity=$("<td>"+ data.list[i].quantity +"</td>");
+							//$productModel=$("<td>"+ data.list[i].productModel +"</td>");
+							//$quantity=$("<td>"+ data.list[i].quantity +"</td>");
+							productArray = JSON.parse(data.list[i].product);
+							parseString = '';
+							for( j=0; j<productArray.length; j++ ){
+								parseString += productArray[j].productModel + " : " + productArray[j].quantity;
+								parseString += "<br/>";
+							}
+							$product=$("<td>"+ parseString +"</td>");
 							$status=$("<td>"+ data.list[i].status +"</td>");
 							$shipping=$("<td>"+ data.list[i].shipping +"</td>");
 							$operation=$('<td><a style="color:#A67D3D" href="ordereditor.jsp?id='+ data.list[i].id +'">edit</a><font style="color:#999 !important">/</font><a style="color:#A67D3D" href="javascript:deleteOrder('+ data.list[i].id +')">delete</a></td>');
 							$orderInfo=$("<tr></tr>");
 							$orderInfo.append($orderNumber);
-							$orderInfo.append($productModel);
-							$orderInfo.append($quantity);
+							//$orderInfo.append($productModel);
+							//$orderInfo.append($quantity);
+							$orderInfo.append($product);
 							$orderInfo.append($status);
 							$orderInfo.append($shipping);
 							$orderInfo.append($operation);
@@ -425,8 +433,9 @@
 						</tr>
 						<tr>
 							<th scope="col">Order Number</th>
-							<th scope="col">Product Model</th>
-							<th scope="col">Quantity</th>
+							<!--<th scope="col">Product Model</th>
+							<th scope="col">Quantity</th>-->
+							<th scope="col">Product</th>
 							<th scope="col">Status</th>
 							<th scope="col">Shipping</th>
 							<th scope="col">Operation</th>
