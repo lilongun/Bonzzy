@@ -20,7 +20,7 @@ public class OrderInfo{
 
     private String orderNumber;
 
-    private List<Product> productArray;
+    private String product;
 
     private String productModel;
 

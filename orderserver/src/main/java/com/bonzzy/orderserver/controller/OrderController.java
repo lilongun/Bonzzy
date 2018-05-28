@@ -1,5 +1,6 @@
 package com.bonzzy.orderserver.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.bonzzy.orderserver.domain.OrderInfo;
 import com.bonzzy.orderserver.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,18 +62,19 @@ public class OrderController {
     @ResponseBody
     @PreAuthorize("hasAuthority('admin')")
     public String saveOrder(@RequestBody OrderInfo orderInfo){
-        System.out.println(orderInfo.getProductArray());
-        //int result = orderService.saveOrderInformation(orderInfo);
-        //if(result == 1) {
+        JSONArray array = JSONArray.parseArray(orderInfo.getProduct());
+        int result = orderService.saveOrderInformation(orderInfo);
+        if(result == 1) {
             return "success";
-        //}
-        //return "fail";
+        }
+        return "fail";
     }
 
     @RequestMapping(value="/updateOrder", method=RequestMethod.POST)
     @ResponseBody
     @PreAuthorize("hasAuthority('admin')")
     public String updateOrder(@RequestBody OrderInfo orderInfo){
+        JSONArray array = JSONArray.parseArray(orderInfo.getProduct());
         int result = orderService.updateOrderInformation(orderInfo);
         if(result == 1) {
             return "success";

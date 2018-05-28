@@ -4,6 +4,7 @@
      <resultMap type="com.bonzzy.orderserver.domain.OrderInfo" id="order">
         <id property="id" column="id"/>
         <result property="orderNumber" column="order_number"/>
+         <result property="product" column="product"/>
         <result property="productModel" column="product_model"/>
         <result property="quantity" column="quantity"/>
         <result property="status" column="status"/>
@@ -16,7 +17,7 @@
      </resultMap>
 
      <select id="queryOrderInfomationByOrderNumber" resultMap="order">
-        select id,order_number,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by
+        select id,order_number,product,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by
          from order_info where order_number=#{orderNumber} and is_deleted=0
      </select>
 
@@ -25,10 +26,13 @@
     </select>
 
     <select id="queryOrderInfomations" resultMap="order">
-        select id,order_number,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by,quality_check
+        select id,order_number,product,product_model,quantity,status,shipping,created_date,created_by,last_modified_date,last_modified_by,quality_check
         from order_info where is_deleted=0
         <if test="orderNumber != null">
            and order_number=#{orderNumber}
+        </if>
+        <if test="product != null">
+            and product = #{product}
         </if>
         <if test="productModel != null">
             and product_model=#{productModel}
@@ -54,6 +58,9 @@
             <if test="orderNumber != null">
                 order_number,
             </if>
+            <if test="product != null">
+                product,
+            </if>
             <if test="productModel != null">
                 product_model,
             </if>
@@ -73,6 +80,9 @@
         <trim prefix=" values(" suffix=")" suffixOverrides=",">
             <if test="orderNumber != null">
                 #{orderNumber},
+            </if>
+            <if test="product != null">
+                #{product},
             </if>
             <if test="productModel != null">
                 #{productModel},
@@ -97,6 +107,9 @@
         <set>
             <if test="isDeleted != null">
                 is_deleted = #{isDeleted},
+            </if>
+            <if test="product != null">
+                product = #{product},
             </if>
             <if test="productModel != null">
                 product_model = #{productModel},
@@ -124,6 +137,9 @@
         select count(1) from order_info where is_deleted=0
         <if test="orderNumber != null">
             and order_number=#{orderNumber}
+        </if>
+        <if test="product != null">
+            and product = #{product}
         </if>
         <if test="productModel != null">
             and product_model=#{productModel}
