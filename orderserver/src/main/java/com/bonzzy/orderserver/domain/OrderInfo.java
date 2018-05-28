@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by lilongyun on 2018/4/30.
@@ -18,6 +19,8 @@ public class OrderInfo{
     private Integer id;
 
     private String orderNumber;
+
+    private List<Product> productArray;
 
     private String productModel;
 

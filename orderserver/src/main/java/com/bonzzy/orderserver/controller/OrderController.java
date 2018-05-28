@@ -61,11 +61,12 @@ public class OrderController {
     @ResponseBody
     @PreAuthorize("hasAuthority('admin')")
     public String saveOrder(@RequestBody OrderInfo orderInfo){
-        int result = orderService.saveOrderInformation(orderInfo);
-        if(result == 1) {
+        System.out.println(orderInfo.getProductArray());
+        //int result = orderService.saveOrderInformation(orderInfo);
+        //if(result == 1) {
             return "success";
-        }
-        return "fail";
+        //}
+        //return "fail";
     }
 
     @RequestMapping(value="/updateOrder", method=RequestMethod.POST)
