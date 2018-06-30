@@ -3,6 +3,7 @@ package com.bonzzy.orderserver.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.bonzzy.orderserver.domain.OrderInfo;
 import com.bonzzy.orderserver.service.OrderService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.Map;
  * Created by lilongyun on 2018/5/10.
  */
 @RestController
+@Api
 public class OrderController {
     @Autowired
     private OrderService orderService;
