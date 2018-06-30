@@ -29,7 +29,6 @@ public class SwaggerConfig {
     private ApiInfo buildApiInf() {
         return new ApiInfoBuilder()
                 .title("RestAPI Docs")
-                .termsOfServiceUrl("http://www.github.com/kongchen/swagger-maven-plugin")
                 .build();
     }
 }

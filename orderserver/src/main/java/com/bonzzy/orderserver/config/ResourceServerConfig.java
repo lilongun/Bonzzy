@@ -20,6 +20,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/query/**").permitAll().antMatchers("/queryQualityCheck/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
